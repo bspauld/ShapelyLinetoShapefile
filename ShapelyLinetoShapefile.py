@@ -29,24 +29,19 @@ crs = fiona.crs.from_epsg(4326)
 
 schema = {
         'geometry': 'LineString',
-        'properties': {'EventID': 'int','PointID':'int','Lon':'float','Lat':'float',},
+        'properties': {'LineID': 'int','PointID':'int','Lon':'float','Lat':'float',},
     }
 
 
 datalist = [line.split(' ') for line in inputFile.readlines()]
 
 
-##with open(inputFile, 'r') as f:
-##
-##        for x in f:
-##            datalist.append([(elt.strip()) for elt in x.split(' ')])
-
 print ((len(datalist)))
 
 
 with fiona.open(outpath+outShape, 'w', driver='ESRI Shapefile',crs = crs, schema = schema) as c:
     for i in range(len(datalist)):
-        eventID = datalist[i][0]
+        lineID = datalist[i][0]
         pointID = datalist[i][1]
 
         lonVal = float(datalist[i][2])
@@ -63,7 +58,7 @@ with fiona.open(outpath+outShape, 'w', driver='ESRI Shapefile',crs = crs, schema
 
         c.write({
                         'geometry': mapping(linestring),
-                        'properties': {'EventID': eventID,'PointID':pointID,'Lon':lonVal,'Lat':latVal, },
+                        'properties': {'LineID': lineID,'PointID':pointID,'Lon':lonVal,'Lat':latVal, },
                         })
 
 c.close()
